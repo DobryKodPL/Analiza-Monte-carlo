@@ -108,7 +108,7 @@ Sub Monte_Carlo_auto()
     
 odnowa:
 
-Range("a1") = InputBox("Wybierz 1 jak chcesz mieć rozkład normalny, 2 jak trójkątny rosnący, 3 jak trójkątny malejący, 4 jak kwadratowy, 0 jak chcesz zakończyć")
+Range("a1") = InputBox("Wybierz 1 jak chcesz mieć rozkład normalny, 2 jak trójkątny lewoskośny, 3 jak trójkątny prawoskośny, 4 jak kwadratowy, 0 jak chcesz zakończyć")
 
 Select Case Range("a1").Value
 
