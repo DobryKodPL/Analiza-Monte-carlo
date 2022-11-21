@@ -1,0 +1,432 @@
+Option Explicit
+
+Sub Monte_Carlo_auto()
+
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''' Tabela1
+    Range("b2").Select
+    ActiveCell.FormulaR1C1 = "Pozycja sprawozdawcza"
+    Range("b2:c2").Select
+    Selection.Borders(xlDiagonalDown).LineStyle = xlNone
+    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
+    With Selection.Borders(xlEdgeLeft)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeRight)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideVertical)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideHorizontal)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    Columns("b:b").EntireColumn.AutoFit
+    Range("b2").Select
+    With Selection.Interior
+        .Pattern = xlSolid
+        .PatternColorIndex = xlAutomatic
+        .Color = 65535
+        .TintAndShade = 0
+        .PatternTintAndShade = 0
+    End With
+    Selection.Font.Bold = True
+    Range("a1").Select
+    
+    
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''' Tabela 2
+    
+    
+    
+    Range("b4").Select
+    ActiveCell.FormulaR1C1 = "Wartości pomocnicze"
+    Range("b5").Select
+    ActiveCell.FormulaR1C1 = "Min"
+    Range("b6").Select
+    ActiveCell.FormulaR1C1 = "Max"
+    Range("b7").Select
+    ActiveCell.FormulaR1C1 = "Średnia"
+    Range("b8").Select
+    ActiveCell.FormulaR1C1 = "Ochylenie standardowe"
+    Range("b4:c8").Select
+    Selection.Borders(xlDiagonalDown).LineStyle = xlNone
+    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
+    With Selection.Borders(xlEdgeLeft)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeRight)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideVertical)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideHorizontal)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    Columns("b:b").EntireColumn.AutoFit
+    Range("b4").Select
+    With Selection.Interior
+        .Pattern = xlSolid
+        .PatternColorIndex = xlAutomatic
+        .Color = 43535
+    End With
+    Selection.Font.Bold = True
+    Range("a1").Select
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''' Tabela3
+    
+    Range("I3").Select
+    ActiveCell.FormulaR1C1 = "Częstość"
+    Range("a1").Select
+    
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''' Wybór postaci modelu
+    
+    
+odnowa:
+
+Range("a1") = InputBox("Wybierz 1 jak chcesz mieć rozkład normalny, 2 jak trójkątny rosnący, 3 jak trójkątny malejący, 4 jak kwadratowy, 0 jak chcesz zakończyć")
+
+Select Case Range("a1").Value
+
+Case Is = 1
+    Range("c7") = InputBox("Podaj średnią wartość")
+    Range("c8") = InputBox("Podaj odchylenie standardowe wartości")
+    Range("c5") = InputBox("Podaj minimalną wartosć")
+    Range("c6") = InputBox("Podaj maksymalną wartość")
+Case Is = 2
+    Range("c5") = InputBox("Podaj minimalną wartosć")
+    Range("c6") = InputBox("Podaj maksymalną wartość")
+Case Is = 3
+    Range("c5") = InputBox("Podaj minimalną wartosć")
+    Range("c6") = InputBox("Podaj maksymalną wartość")
+Case Is = 4
+    Range("c5") = InputBox("Podaj minimalną wartosć")
+    Range("c6") = InputBox("Podaj maksymalną wartość")
+Case Is = 0
+    MsgBox ("Zakończono analizę")
+    GoTo koniec
+Case Is <> 1, 2, 3, 4, 0
+    MsgBox ("Podaj poprawną liczbę")
+    GoTo odnowa
+End Select
+
+koniec:
+
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''' Obliczenia
+
+Select Case Range("a1")
+
+Case Is = 1
+    Range("c2") = "=NORMINV(RAND(),R[+5]C[],R[+6]C[])"
+Case Is = 2
+    Range("c2") = "=R[3]C[]+(R[4]C[]-R[3]C[])*RAND()^0.5"
+Case Is = 3
+    Range("c2") = "=R[3]C[]+(R[4]C[]-R[3]C[])*(1-RAND()^0.5)"
+Case Is = 4
+    Range("c2") = "=R[3]C[]+(R[4]C[]-R[3]C[])*RAND()"
+End Select
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''' Wartości do tabeli poocniczej
+
+
+Range("B10").Select
+    ActiveCell.FormulaR1C1 = "Rozstęp"
+    Range("B11").Select
+    ActiveCell.FormulaR1C1 = "Liczba scenariuszy"
+    Range("B12").Select
+    ActiveCell.FormulaR1C1 = "Liczba przedziałów"
+    Range("B13").Select
+    ActiveCell.FormulaR1C1 = "Długość przedziału"
+    Range("B10:C13").Select
+    Selection.Borders(xlDiagonalDown).LineStyle = xlNone
+    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
+    With Selection.Borders(xlEdgeLeft)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeRight)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideVertical)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideHorizontal)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    Range("C10").Select
+    ActiveCell.FormulaR1C1 = "=R[-4]C-R[-5]C"
+    Range("C12").Select
+    ActiveCell.FormulaR1C1 = "=TRUNC(SQRT(R[-1]C))"
+    Range("C13").Select
+    ActiveCell.FormulaR1C1 = "=R[-3]C/R[-1]C"
+    
+    
+    
+ ''''''''''''''''''''''''''''''''''''''''''''''''''''''''' Scenariusze
+
+
+
+ Range("F2").Select
+    ActiveCell.FormulaR1C1 = "Scenariusze"
+    Range("F3").Select
+    ActiveCell.FormulaR1C1 = "=R[-1]C[-3]"
+    Range("F4").Select
+    Columns("F:F").EntireColumn.AutoFit
+    Range("F2:F3").Select
+    Selection.Borders(xlDiagonalDown).LineStyle = xlNone
+    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
+    With Selection.Borders(xlEdgeLeft)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeRight)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideVertical)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideHorizontal)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    Range("F3").Select
+    With Selection.Interior
+        .Pattern = xlSolid
+        .PatternColorIndex = xlAutomatic
+        .ThemeColor = xlThemeColorAccent2
+        .TintAndShade = 0.399975585192419
+        .PatternTintAndShade = 0
+    End With
+    Range("A1").Select
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''' Monte carlo
+
+Dim i As Integer, n As Integer
+
+Dim rng_Scenariusz As Range
+    n = InputBox("Podaj liczbę scenariuszy")
+    Range("c11") = n
+    Set rng_Scenariusz = Range("f3")
+        With Application
+            .Calculation = xlCalculationManual
+            .ScreenUpdating = False
+                For i = 1 To n
+                    Calculate
+                    rng_Scenariusz.Offset(i + 1).Value _
+                    = rng_Scenariusz.Value
+                    .StatusBar = "Ukończono " & _
+                    Format(i / n, "0.00%") & " symulacji."
+                Next i
+            .ScreenUpdating = True
+            .Calculation = xlCalculationAutomatic
+        End With
+        
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''' Tabela min max scenariusze
+    
+    Range("B16").Select
+    ActiveCell.FormulaR1C1 = "Min (scenariusze)"
+    Range("B17").Select
+    ActiveCell.FormulaR1C1 = "Max (scenariusze)"
+    Range("C16").Select
+    ActiveCell.FormulaR1C1 = "=MIN(R[-11]C[3]:R[88]C[3])"
+    Range("C17").Select
+    ActiveCell.FormulaR1C1 = "=MAX(R[-12]C[3]:R[87]C[3])"
+    Range("C18").Select
+    Range("B16:C17").Select
+    Selection.Borders(xlDiagonalDown).LineStyle = xlNone
+    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
+    With Selection.Borders(xlEdgeLeft)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeRight)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideVertical)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideHorizontal)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    Range("B16:B17").Select
+    With Selection.Interior
+        .Pattern = xlSolid
+        .PatternColorIndex = xlAutomatic
+        .ThemeColor = xlThemeColorAccent1
+        .TintAndShade = 0.399975585192419
+        .PatternTintAndShade = 0
+    End With
+    Range("A1").Select
+        
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''' Tabela3 początek
+        
+  Range("H5").Select
+    ActiveCell.FormulaR1C1 = Range("c16")
+    Range("H4").Select
+    ActiveCell.FormulaR1C1 = Range("c16") - Range("c13")
+    Range("H6").Select
+    ActiveCell.FormulaR1C1 = Range("c16") + Range("c13")
+    Range("i4").Select
+    ActiveCell.Value = "1"
+    Range("i5").Select
+    ActiveCell.Value = "1"
+    Range("i6").Select
+    ActiveCell.Value = "1"
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''' Tabela3 środek
+
+
+Dim x As Integer
+Dim w1 As Integer
+Dim k1 As Integer
+
+x = Range("c12").Value * 1
+
+w1 = 4
+k1 = 7
+
+Cells(w1, k1).Select
+Do Until ActiveCell.Value > x
+    w1 = w1 + 1
+    Cells(w1, k1).Select
+    ActiveCell.Value = Cells(w1 - 1, k1).Value + 1
+    
+Loop
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''' Tabela 3 koniec
+
+Dim w2 As Integer
+Dim k2 As Integer
+w2 = 7
+k2 = 7
+Dim w3 As Integer
+Dim k3 As Integer
+w3 = 7
+k3 = 8
+Cells(w2, k2).Select
+Do While Cells(w2, k2).Value > 0
+    
+    Cells(w2, k2).Select
+    Cells(w2, k2 + 1).Value = Cells(w2 - 1, k2 + 1).Value + Cells(13, 3).Value
+    Cells(w2, k2 + 2).Value = "1"
+    w2 = w2 + 1
+Loop
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''  Format waluta
+        
+    
+Range("H4").Select
+Range(Selection, Selection.End(xlDown)).Select
+Selection.NumberFormat = "#,##0.00 $"
+Range("a1").Select
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''' Częstość
+
+
+Range("I4").Select
+Range(Selection, Selection.End(xlDown)).Select
+Selection.FormulaArray = "=FREQUENCY(R[+1]C[-3]:R[1000]C[-3],RC[-1]:R[50]C[-1])"
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''' Format tabeli
+
+Range("h3").Select
+Range(Selection, Selection.End(xlToRight).End(xlDown)).Select
+Selection.Borders(xlDiagonalDown).LineStyle = xlNone
+    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
+   With Selection.Borders(xlEdgeLeft)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeRight)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideVertical)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideHorizontal)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    
+        Range("i3").Select
+    With Selection.Interior
+        .Pattern = xlSolid
+        .PatternColorIndex = xlAutomatic
+        .Color = 65535
+    End With
+    Range("I17").Select
+    
+    
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''' Wykres
+    
+    Range("H3").Select
+
+Range(Selection, Selection.End(xlToRight).End(xlDown)).Select
+ActiveSheet.Shapes.AddChart.Select
+ActiveChart.ChartType = xlColumnClustered
+Range("a1").Select
+End Sub
